@@ -1,108 +1,131 @@
 # file-itr-india
 
-An agent skill for preparing and e-filing an Indian income tax return — ITR-1, 2,
-3 or 4 — on `eportal.incometax.gov.in`. Works with
+An agent skill for filing an Indian income tax return (ITR-1, 2, 3 or 4) on
+`eportal.incometax.gov.in`. Works with
 [Claude Code](https://claude.com/claude-code) and
 [Codex](https://developers.openai.com/codex).
 
-It exists because the hard parts of filing are not the tax rates. They are
-reconciling every rupee to a document, choosing the regime by actually computing
-both, and surviving a portal that fails silently in a dozen documented ways.
+Tax rates are the easy part. What takes the time is matching every credit in your
+bank statements to something that explains it, working out which regime is
+actually cheaper for you, and getting through a portal that fails silently in a
+dozen different ways.
 
-> **Current for FY 2025-26 (AY 2026-27).** Slabs, rates and thresholds move with
-> most Budgets, and the portal changes between filing seasons. Every rate table in
-> the skill is marked with the year it describes and tells the agent to re-confirm
-> before relying on it — but if you are filing for a later year, treat the numbers
-> as a starting point and check them against
-> [incometax.gov.in](https://www.incometax.gov.in/).
+> Written for FY 2025-26 (AY 2026-27). Slabs and thresholds move with most
+> Budgets, and the portal changes between filing seasons. Every rate table in the
+> skill carries the year it describes and tells the agent to re-confirm it, but if
+> you're filing for a later year, check the numbers against
+> [incometax.gov.in](https://www.incometax.gov.in/) before you trust them.
 
 ## What it does
 
-- **Ties out every rupee.** Every credit in every statement lands in a named income
-  head or a named not-income reason. Leftovers get surfaced, not absorbed.
-- **Computes both regimes** from the same figures, in a script, before the portal
-  computes anything — so you catch the portal rather than the reverse.
-- **Picks the form** on the facts, including the three that bar ITR-1 and ITR-4
-  outright and that no income-shape test catches.
-- **Drives the portal** schedule by schedule, with a catalogue of the validation
-  defects it raises and the fix for each.
-- **Verifies the preview** line by line against the independent computation before
-  anything is submitted.
+It works the return in order: gather, reconcile, pick the form, compute, fill,
+validate, verify.
 
-## What stays with you
+Reconciliation is the part most guides skip. Every credit in every bank statement
+has to land somewhere, either under an income head or under a stated reason it
+isn't income (a transfer between your own accounts, a gift from a relative, a
+loan, money coming back from your broker). Whatever's left over gets raised with
+you instead of quietly ignored, because that leftover is usually either income
+nobody remembered or a document nobody sent.
 
-Three acts belong to the taxpayer, and the skill hands each over rather than
-performing it:
+It computes both regimes in a script before the portal computes anything, so
+there's an independent number to check the portal against rather than the other
+way round.
 
-| Act | Why |
-|---|---|
-| **Logging in** | Your password and OTP stay yours |
-| **Paying** | The skill states the exact amount, head and AY; you pay |
-| **Submitting and e-verifying** | The declaration is yours to make, and e-verification has a **30-day** deadline that voids the filing if missed |
+Form selection checks three things that rule out ITR-1 and ITR-4 whatever your
+income looks like: whether you were a director in a company, whether you held
+unlisted shares at any point, and whether you hold anything abroad. None of them
+show up in an income-shape test, and all three are common if you work at a
+startup.
 
-It also stays out of product recommendations. "Buy this policy and save tax" is
-financial advice; laying out the options factually is not.
+After that it fills the portal schedule by schedule, then reads the final preview
+line by line against its own arithmetic before you submit anything.
+
+## What you do yourself
+
+Three things stay with you.
+
+You log in, because your password and OTP are yours. You make the payment, once
+the skill has told you the exact amount, the head (Minor Head 300) and the
+assessment year. And you submit and e-verify, because the declaration is yours to
+make.
+
+E-verification has a 30-day deadline. Miss it and the return is void, as if you'd
+never filed at all.
+
+It also won't tell you to buy an insurance policy to save tax. Explaining what a
+deduction is worth is fine. Recommending a product isn't.
 
 ## Install
 
-`SKILL.md` plus a `references/` folder is the format both agents read, so it is
-the same clone either way — only the destination differs.
+Both agents read the same format, so it's the same clone. Only the destination
+changes.
 
-**Claude Code**
+Claude Code:
 
 ```bash
 git clone https://github.com/dakshshah96/file-itr-india.git \
   ~/.claude/skills/file-itr-india
 ```
 
-**Codex**
+Codex:
 
 ```bash
 git clone https://github.com/dakshshah96/file-itr-india.git \
   ~/.agents/skills/file-itr-india
 ```
 
-For a single project rather than your whole machine, clone into
-`.claude/skills/` or `.agents/skills/` inside the repo instead.
+For one project rather than your whole machine, clone into `.claude/skills/` or
+`.agents/skills/` inside the repo instead.
 
-Start a new session afterwards. Both agents load the skill from its description,
-so just say what you need — "help me file my ITR", "I have my Form 16 and a
-broker tax P&L" — and it fires on its own. In Codex you can also call it directly
-with `$file-itr-india`.
+Start a new session afterwards. Both agents pick the skill up from its
+description, so you can just say what you want: "help me file my ITR", or "I've
+got my Form 16 and a broker tax P&L". In Codex you can also call it directly with
+`$file-itr-india`.
 
 ## Structure
 
 ```
-SKILL.md                              the workflow, the handoff, form and regime choice
+SKILL.md                              the workflow, what stays with you, form and regime choice
 references/
   reconciliation.md                   tying income to documents; where AIS is blind
   regimes.md                          slabs, rebate, the ₹12L cliff, the tax script
   deductions-old-regime.md            what to collect if the old regime is in play
   capital-gains.md                    111A/112A, equity-oriented tests, Schedule 112A
   presumptive-business.md             44ADA/44AD for creators and freelancers
-  foreign-assets.md                   Schedule FA — including the calendar-year trap
+  foreign-assets.md                   Schedule FA, including the calendar-year trap
   virtual-digital-assets.md           crypto and NFTs under 115BBH
   portal-workflow.md                  the filing flow and the defect catalogue
   portal-automation.md                driving the Angular UI without silent failures
 ```
 
-Reference loads by branch: every run reads reconciliation and regimes; capital
-gains, presumptive income, foreign assets and crypto load only for the runs that
-hit them.
+Every run reads `reconciliation.md` and `regimes.md`. The rest load only when they
+apply, so a salaried filer with no capital gains never pulls in the crypto or
+foreign-asset material.
 
-## A few things it knows that cost real time to learn
+## Things that cost time to find out
 
-- Validation runs in **two passes**, and clearing the first does not clear the second.
-- The challan **does not** reliably auto-populate — and the reference on the payment
-  screen is the gateway transaction ID, not the OLTAS CIN. The BSR code and challan
-  serial live only on the downloaded receipt PDF.
-- **Schedule FA reports the calendar year**, while every other schedule in the same
-  return reports the financial year.
-- The s.87A rebate is tested on total income *including* capital gains but offsets
-  only slab-rate tax — so equity STCG is payable even well under the threshold, and
-  crossing it forfeits the whole rebate rather than taxing the excess.
-- A leaked `cdk-overlay-backdrop` swallows every click on the page with no error
-  anywhere.
+Validation runs twice. Clearing the first pass doesn't clear the second, which
+applies extra rules on top of it.
+
+The challan often doesn't auto-populate into Schedule IT, even when you pay
+through the portal's own Pay Now button. The reference on the payment
+confirmation screen is the payment gateway's transaction ID, not the OLTAS CIN.
+Your BSR code and challan serial appear only on the receipt PDF you download.
+Guess at them and the payment won't reconcile, so you get a demand notice for tax
+you've already paid.
+
+Schedule FA reports the calendar year. Every other schedule in the same return
+reports the financial year.
+
+The section 87A rebate is tested on total income including capital gains, but it
+only offsets slab-rate tax. Equity STCG is payable even if you're well under the
+threshold, and crossing the threshold costs you the entire rebate rather than tax
+on the excess.
+
+A leaked `cdk-overlay-backdrop` will swallow every click on the page without
+raising an error anywhere. Buttons still take focus, coordinates still resolve,
+and nothing happens.
 
 ## Scope
 
@@ -121,16 +144,16 @@ for. For tax corrections, cite the section.
 
 Inspired by [shivprime94/file-itr](https://github.com/shivprime94/file-itr).
 
-This is a rewrite rather than a fork — better structured, with bug fixes and
-improvements found while filing a return end to end.
+This is a rewrite rather than a fork: better structured, with bug fixes and
+improvements found while actually filing a return.
 
 ## Disclaimer
 
-This is not tax advice, and its author is not your chartered accountant. Rules
-change every assessment year; AIS and 26AS are frequently incomplete or wrong; and
-the figures you file are yours to stand behind. Verify anything that matters against
-[incometax.gov.in](https://www.incometax.gov.in/) or a qualified professional.
+This isn't tax advice and it's no substitute for a chartered accountant. The
+rules change every assessment year, AIS and 26AS are often incomplete or plain
+wrong, and the numbers you file are yours to defend. Check anything that matters
+against [incometax.gov.in](https://www.incometax.gov.in/) or ask a professional.
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
