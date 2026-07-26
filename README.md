@@ -1,7 +1,9 @@
 # file-itr-india
 
-A [Claude Code](https://claude.com/claude-code) skill for preparing and e-filing an
-Indian income tax return — ITR-1, 2, 3 or 4 — on `eportal.incometax.gov.in`.
+An agent skill for preparing and e-filing an Indian income tax return — ITR-1, 2,
+3 or 4 — on `eportal.incometax.gov.in`. Works with
+[Claude Code](https://claude.com/claude-code) and
+[Codex](https://developers.openai.com/codex).
 
 It exists because the hard parts of filing are not the tax rates. They are
 reconciling every rupee to a document, choosing the regime by actually computing
@@ -43,14 +45,30 @@ financial advice; laying out the options factually is not.
 
 ## Install
 
+`SKILL.md` plus a `references/` folder is the format both agents read, so it is
+the same clone either way — only the destination differs.
+
+**Claude Code**
+
 ```bash
 git clone https://github.com/dakshshah96/file-itr-india.git \
   ~/.claude/skills/file-itr-india
 ```
 
-Or drop the folder anywhere Claude Code reads skills from. Then just describe what
-you need — "help me file my ITR", "I have my Form 16 and a broker tax P&L" — and
-it fires on its own.
+**Codex**
+
+```bash
+git clone https://github.com/dakshshah96/file-itr-india.git \
+  ~/.agents/skills/file-itr-india
+```
+
+For a single project rather than your whole machine, clone into
+`.claude/skills/` or `.agents/skills/` inside the repo instead.
+
+Start a new session afterwards. Both agents load the skill from its description,
+so just say what you need — "help me file my ITR", "I have my Form 16 and a
+broker tax P&L" — and it fires on its own. In Codex you can also call it directly
+with `$file-itr-india`.
 
 ## Structure
 
