@@ -1,0 +1,11 @@
+.DS_Store
+*.swp
+node_modules/
+
+# Never commit a real taxpayer's documents
+*.pdf
+*.csv
+*.xlsx
+*.xls
+*.json
+!package.json
