@@ -116,13 +116,22 @@ Then pick the simplest form that fits:
 
 | Form | Fits |
 |---|---|
-| **ITR-1** | Resident, total income ≤ ₹50L, salary + one house property + other sources |
+| **ITR-1** | AY 2026-27: resident individual, total income ≤ ₹50L, salary/pension + up to two house properties + permitted other sources; aggregate LTCG u/s 112A up to ₹1.25L is allowed |
 | **ITR-2** | Salary, capital gains, several properties, foreign assets — no business income |
-| **ITR-4** | Resident presumptive (44AD/44ADA/44AE), ≤ ₹50L, no capital gains |
-| **ITR-3** | Business or professional income that ITR-4 cannot take — e.g. presumptive *plus* capital gains |
+| **ITR-4** | AY 2026-27: eligible resident presumptive filer (44AD/44ADA/44AE), total income ≤ ₹50L, up to two house properties and permitted other sources; aggregate LTCG u/s 112A up to ₹1.25L is allowed |
+| **ITR-3** | Business or professional income that ITR-4 cannot take — e.g. presumptive income plus STCG, non-112A capital gains, or 112A LTCG above ₹1.25L |
 
-Salaried plus creator income plus a few share sales is **ITR-3**: capital gains
-rule out ITR-4. Salaried plus share sales, no business, is **ITR-2**.
+The section 112A allowance is narrow. **Any STCG**, non-112A capital gain, or
+aggregate 112A LTCG above ₹1.25L rules out ITR-1 and ITR-4. So salaried plus
+creator income plus listed-share STCG is **ITR-3**, while a qualifying
+presumptive filer with ₹90,000 of 112A LTCG may still use **ITR-4** if no other
+disqualifier applies. Salaried plus STCG, no business, is **ITR-2**.
+
+For AY 2026-27 form selection, cross-check the current Income Tax Department
+[ITR-1 FAQ](https://www.incometax.gov.in/iec/foportal/help/all-topics/e-filing-services/ITR1-FAQ)
+and [ITR-4 FAQ](https://www.incometax.gov.in/iec/foportal/help/all-topics/e-filing-services/itr%204-faqs),
+then verify against Rule 12, the notified return and its validation rules if
+anything conflicts.
 
 **Done when** the form is named and all three disqualifiers checked against the facts.
 

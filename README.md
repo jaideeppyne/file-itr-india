@@ -38,6 +38,10 @@ unlisted shares at any point, and whether you hold anything abroad. None of them
 show up in an income-shape test, and all three are common if you work at a
 startup.
 
+For AY 2026-27 it also handles the simplified forms' narrow capital-gain
+allowance correctly: aggregate LTCG under section 112A up to ₹1.25 lakh can fit
+ITR-1 or ITR-4, while STCG and other capital gains cannot.
+
 After that it fills the portal schedule by schedule, then reads the final preview
 line by line against its own arithmetic before you submit anything.
 

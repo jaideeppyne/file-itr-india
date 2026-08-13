@@ -68,6 +68,8 @@ Presumptive income @50% (62ii)      25,000
 Business or professional income makes the taxpayer a business filer, which changes
 two things:
 
-- The form becomes **ITR-4** (within limits, no capital gains) or **ITR-3**.
-  Capital gains alone push a presumptive filer to ITR-3.
+- For AY 2026-27, the form may be **ITR-4** when all simplified-form
+  conditions hold, including aggregate LTCG u/s 112A no more than ₹1.25L.
+  STCG, another kind of capital gain, or 112A LTCG above that limit requires
+  **ITR-3**.
 - The old regime now needs **Form 10-IEA before the due date**. See `regimes.md`.
